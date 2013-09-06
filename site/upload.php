@@ -49,7 +49,7 @@ if (isset($_POST['signature'])) {
 	if (empty($ERROR)) {
 		$container = $config->container();
 		$obj = $container->DataObject();
-		$obj->extra_headers[] = 'X-Delete-After: '.$_POST['expiration'];
+		$obj->extra_headers['X-Delete-After'] = $_POST['expiration'];
 		$obj->Create(
 			array('name' => $filename), 
 			$_FILES[$filename]['tmp_name']);
@@ -62,7 +62,8 @@ if (isset($_POST['signature'])) {
 // form URL
 $container = $config->Container();
 $arr = split(' ', microtime());
-$filename = str_replace('.', '_', $arr[1].'_'.$arr[0]);
+$prefix = strtotime('2031-12-31 11:59:59')-time();
+$filename = $prefix . str_replace('.', '_', $arr[1].'_'.$arr[0]);
 $signature = $config->signature($filename);
 ?><!DOCTYPE html>
 <html>

@@ -67,7 +67,7 @@ class Config {
 		// return/create the container
 		$this->_container = $swift->Container();
 		$this->_container->Create(array('name'=>$this->container_name));
-		$this->_cdncontainer = $this->_container->PublishToCDN();
+		$this->_cdncontainer = $this->_container->enableCDN(60);
 		return $this->_container;
 	}
 	
