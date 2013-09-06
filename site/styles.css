@@ -41,3 +41,7 @@ h1 a:hover {
 p.pic {
 	text-align: center;
 }
+#menu {
+	font-size: smaller;
+	text-align: right;
+}

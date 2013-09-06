@@ -31,8 +31,7 @@ if (isset($_POST['bad'])) {
 </head>
 <body>
 <h1><a href="/">Pictr</a></h1>
-<p><a href="/upload.php">Upload a picture</a></p>
-<ol>
+<p id="menu"><a href="/upload.php">Upload a picture</a></p>
 <p class="pic">
 <?php
 printf("<img src=\"%s\" alt=\"\" title=\"%s\" width=\"800\"></a>\n", 

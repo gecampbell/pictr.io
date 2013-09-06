@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>Pictr</h1>
-<p><a href="/upload.php">Upload a picture</a></p>
+<p id="menu"><a href="/upload.php">Upload a picture</a></p>
 <ol>
 <?php
 /**
