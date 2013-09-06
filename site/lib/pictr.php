@@ -26,7 +26,7 @@ class Config {
 	/**
 	 * creates a new configuration object, optional config file name
 	 */
-	public function __construct($ini_name="/etc/pictr.ini") {
+	public function __construct($ini_name="/var/www/pictr.ini") {
 		$ini = parse_ini_file($ini_name);
 		foreach($ini as $key => $value)
 			$this->$key = $value;
