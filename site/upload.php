@@ -72,21 +72,25 @@ $signature = $config->signature($filename);
 	<link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-	<h1>Upload</h1>
+	<h1>Pictr Upload</h1>
 	<?php
 	if (!empty($ERROR)) {
 		$msg = implode("<br>\n", $ERROR);
 		print("<p class=\"error\">$msg</p>\n");
 	}
 	?>
-	<p><em>Note: This form is only valid for 10 minutes</em></p>
 	<form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST" enctype="multipart/form-data">
 		<input type="file" name="<?php echo $filename;?>">
 		<p>
 		<select name="expiration">
 		<?php
-			foreach($config->expirations() as $value => $title)
-				print("\t<option value=\"$value\">$title</option>\n");
+			foreach($config->expirations() as $value => $title) {
+				if ($value == 300) 
+					$def = ' selected="selected"';
+				else
+					$def = '';
+				print("\t<option value=\"$value\"$def>$title</option>\n");
+			}
 		?>
 		</select>
 		<input type="hidden" name="signature" value="<?php echo $signature;?>">
