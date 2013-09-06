@@ -79,6 +79,14 @@ $signature = $config->signature($filename);
 		print("<p class=\"error\">$msg</p>\n");
 	}
 	?>
+	<p>
+	To share a picture, select the file using the button below and 
+	then press <em>Upload the picture</em>. 
+	You can choose the duration that your photo will exist (by default,
+	this is five minutes). At the end of that time, your photo 
+	will simply disappear. 
+	</p>
+	<hr>
 	<form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST" enctype="multipart/form-data">
 		<input type="file" name="<?php echo $filename;?>">
 		<p>
