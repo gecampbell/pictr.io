@@ -69,6 +69,7 @@ $signature = $config->signature($filename);
 <html>
 <head>
 	<title>Upload</title>
+	<link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
 	<h1>Upload</h1>

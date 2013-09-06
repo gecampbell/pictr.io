@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>PICTR.IO</title>
-	<link type="text/css" href="styles.css">
+	<link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
 <h1>PICTR.IO</h1>
@@ -27,7 +27,7 @@ if ($olist->Size() == 0) {
 echo "<ol>\n";
 while($object = $olist->Next()) {
 	$imgurl = $object->PublicURL();
-	printf("<li><img src=\"%s\" alt=\"\" title=\"%s\" width=\"600\"></li>\n", 
+	printf("<li><img src=\"%s\" alt=\"\" title=\"%s\" width=\"300\"></li>\n", 
 		$imgurl, $object->Name());
 }
 ?>

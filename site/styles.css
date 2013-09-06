@@ -1,3 +1,17 @@
+body {
+	font-family: helvetica, arial, sans-serif;
+	font-size: 16pt;
+	line-height: 1.5em;
+	margin-left: 8em;
+	margin-right: 8em;
+}
 img {
 	max-width: 800px;
+}
+ol {
+	list-style: none;
+	padding: 1em;
+}
+ol li {
+	display: inline;
 }
