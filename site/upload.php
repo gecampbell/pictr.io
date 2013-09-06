@@ -11,35 +11,59 @@ $config = new Pictr\Config();
 /**
  * handle POST requests
  */
-if (isset($_POST['picturefile'])) {
-	$ERROR = NULL;
+if (isset($_POST['signature'])) {
 
-	// process it
-	$filename = microtime(TRUE);
+	// error flag/message
+	$ERROR = array();
+
+	// find the filename
+	foreach($_FILES as $name => $info) {
+		$filename = $name;
+		break;
+	}
+	
+	// validate signature
+	if ($config->signature($filename) != $_POST['signature']) {
+		$ERROR[] = "Invalid signature";
+		$ERROR[] = print_r($_FILES, TRUE);
+	}
 	
 	// validate expiration
+	if (!array_key_exists($_POST['expiration'], $config->expirations()))
+		die("Invalid expiration value");
 	
+	// validate content-type
+	if (substr($_FILES[$filename]['type'], 0, 5) != 'image')
+		$ERROR[] = sprintf("Invalid content-type [%s]", 
+						$_FILES[$filename]['type']);
 	
-	// redirect home
-	header('Location: http://'.$config->domain);
+	// check for upload error
+	if ($_FILES[$filename]['error'])
+		$ERROR[] = $_FILES[$filename]['error'];
+	
+	// check for valid tmp file
+	if (!is_uploaded_file($_FILES[$filename]['tmp_name']))
+		$ERROR[] = 'Error in uploaded file';
+			
+	// if we're ok, create the object
+	if (empty($ERROR)) {
+		$container = $config->container();
+		$obj = $container->DataObject();
+		$obj->extra_headers[] = 'X-Delete-After: '.$_POST['expiration'];
+		$obj->Create(
+			array('name' => $filename), 
+			$_FILES[$filename]['tmp_name']);
+		
+		header('Location: http://'.$config->domain);
+		exit;
+	}
 }
 
 // form URL
 $container = $config->Container();
-$mtime = microtime();
-$arr = split(' ', $mtime);
-
-$filename = $arr[1].'-'.$arr[0];
-$action = $container->Url();
-$path = parse_url($action, PHP_URL_PATH);
-$redirect = 'http://'.$config->domain.'/validate.php?name='.$filename;
-$max_file_size = $config->max_file_size;
-$max_file_count = $config->max_file_count;
-$expires = time()+(60*10);
-$mykey = $config->temp_url_secret;
-$hmac_body = sprintf('%s\n%s\n%s\n%s\n%s',
-	$path, $redirect, $max_file_size, $max_file_count, $expires);
-$signature = hash_hmac('sha1', $hmac_body, $mykey);
+$arr = split(' ', microtime());
+$filename = str_replace('.', '_', $arr[1].'_'.$arr[0]);
+$signature = $config->signature($filename);
 ?><!DOCTYPE html>
 <html>
 <head>
@@ -47,24 +71,25 @@ $signature = hash_hmac('sha1', $hmac_body, $mykey);
 </head>
 <body>
 	<h1>Upload</h1>
+	<?php
+	if (!empty($ERROR)) {
+		$msg = implode("<br>\n", $ERROR);
+		print("<p class=\"error\">$msg</p>\n");
+	}
+	?>
 	<p><em>Note: This form is only valid for 10 minutes</em></p>
-	<form action="<?php echo $action?>>" method="POST" enctype="multipart/form-data">
-		<input type="hidden" name="redirect" value="<?php echo $redirect?>">
-		<input type="hidden" name="max_file_size" value="<?php echo $max_file_size?>">
-		<input type="hidden" name="max_file_count" value="<?php echo $max_file_count?>">
-		<input type="hidden" name="expires" value="<?php echo $expires?>">
-		<input type="hidden" name="signature" value="<?php echo $signature?>">
-		<input type="file" name="<?php echo $filename?>">
+	<form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST" enctype="multipart/form-data">
+		<input type="file" name="<?php echo $filename;?>">
 		<p>
-		<select>
+		<select name="expiration">
 		<?php
 			foreach($config->expirations() as $value => $title)
-				printf("\t<option value=\"%s\">%s</option>\n",
-					$value, $title);
+				print("\t<option value=\"$value\">$title</option>\n");
 		?>
 		</select>
+		<input type="hidden" name="signature" value="<?php echo $signature;?>">
 		</p>
-		<button type="submit" >Upload</button>
+		<button type="submit">Upload the picture</button>
 	</form>
 </body>
 </html>

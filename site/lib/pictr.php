@@ -17,7 +17,7 @@ class Config {
 		$swift_name,		// name of Swift service
 		$swift_region,		// Swift region identifier
 		$container_name,	// the container name
-		$temp_url_secret;	// secret for temporary URL
+		$secret;			// secret for temporary URL
 	
 	private
 		$_container,		// the base container
@@ -62,7 +62,7 @@ class Config {
 			$this->swift_region);
 		
 		// set the temporary URL secret
-		$swift->SetTempUrlSecret($this->temp_url_secret);
+		$swift->setTempUrlSecret($this->secret);
 			
 		// return/create the container
 		$this->_container = $swift->Container();
@@ -87,6 +87,13 @@ class Config {
 			60*60*24		=> '1 day',
 			60*60*24*7		=> '1 week'
 		);
+	}
+	
+	/**
+	 * compute a signature
+	 */
+	function signature($name) {
+		return sha1($name . '==' . $this->secret);
 	}
 	
 } // end class Config
