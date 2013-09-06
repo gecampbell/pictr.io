@@ -28,7 +28,7 @@ if ($olist->Size() == 0) {
 echo "<ol>\n";
 while($object = $olist->Next()) {
 	$imgurl = $object->PublicURL();
-	printf("<li><a href=\"/pic.php?id=%s\"><img src=\"%s\" alt=\"\" title=\"%s\" width=\"300\"></a></li>\n", 
+	printf("<li><a href=\"/pic.php?id=%s\"><img src=\"%s\" alt=\"\" title=\"%s\" width=\"280\"></a></li>\n", 
 		urlencode($object->Name()), $imgurl, $object->Name());
 }
 ?>
