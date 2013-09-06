@@ -72,7 +72,7 @@ $signature = $config->signature($filename);
 	<link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-	<h1>Pictr Upload</h1>
+	<h1><a href="/">Pictr</a> Upload</h1>
 	<?php
 	if (!empty($ERROR)) {
 		$msg = implode("<br>\n", $ERROR);
