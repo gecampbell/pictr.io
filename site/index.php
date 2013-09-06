@@ -3,6 +3,7 @@
 <head>
 	<title>Pictr - anonymous, ephemeral photo-sharing</title>
 	<link rel="stylesheet" type="text/css" href="styles.css">
+	<meta http-equiv="refresh" content="10">
 </head>
 <body>
 <h1>Pictr</h1>
