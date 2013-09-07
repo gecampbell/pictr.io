@@ -32,11 +32,9 @@ The expiration time on this picture has been increased.</p>
 The expiration time on this picture has been reduced.</p>
 <?php } ?>
 
-<img src="<?php echo $PIC->url?>" alt="<?php echo $PIC->name?>" class="img-responsive" title="Picture expires in <?php
+<p><img src="<?php echo $PIC->url?>" alt="<?php echo $PIC->name?>" class="img-responsive" title="Picture expires in <?php
 	echo number_format($PIC->expiration - time());
-?> seconds">
-
-</div>
+?> seconds"></p>
 
 <form action="<?php print($_SERVER['REQUEST_URI']);?>" method="POST" enctype="multipart/form-data" role="form">
 <div class="form-group">
@@ -46,7 +44,16 @@ The expiration time on this picture has been reduced.</p>
 </form>
 <?php } ?>
 
-<a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-size="large">Tweet</a>
+<p><a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-size="large">Tweet</a></p>
+
+<div class="panel panel-default">
+  <div class="panel-body">
+  	This picture will expire in
+  	<?php echo Pictr\time_seconds($PIC->expiration - time());?>.
+  </div>
+</div>
+
+</div>
 
 <?php include 'footer.html'?>
 </div>

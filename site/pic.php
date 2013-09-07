@@ -69,6 +69,7 @@ try {
 	$PIC->url = $obj->PublicURL();
 	$PIC->expiration = $delete_at;
 } catch (Exception $e) {
+print_r($e);
 	$FOUND=FALSE;
 }
 

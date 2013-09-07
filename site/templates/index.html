@@ -7,11 +7,18 @@
 <div class="page-header">
 <h1><a href="#">Pictr</a> <small>anonymous, ephemeral picture sharing</small></h1>
 </div>
+
 <?php
-	if (empty($PICTURES)) {
+if (empty($PICTURES)) {
 ?>
-<p>There are currently no pictures available on the site. Why don't you
-<a href="/upload">upload one</a>?</p>
+	<div class="jumbotron">
+	<div class="container">
+	<h1>Oh Noes!</h1>
+	<hr>
+	<p class="lead">There are no pictures on the site right now!</p>
+	<p>Why don't you <a href="/upload">upload a new picture</a>?</p>
+	</div>
+	</div>
 <?php } else { ?>
 	<ol class="list-inline">
 	<?php

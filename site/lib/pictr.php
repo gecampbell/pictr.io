@@ -114,3 +114,24 @@ class Config {
 	}
 
 } // end class Config
+
+/**
+ * formats a time string
+ */
+function time_seconds($seconds) {
+	$units = array('hour','minute','second');
+	$val = explode(':', gmdate('H:i:s', $seconds));
+	$out = array();
+	for($i=0; $i<3; $i++) {
+		if ($val[$i])
+			$out[] = (0+$val[$i]).' '.$units[$i].($val[$i]==1?'':'s');
+	}
+	switch(count($out)) {
+	case 3:
+		return $out[0].', '.$out[1].', and '.$out[2];
+	case 2:
+		return $out[0].' and '.$out[1];
+	default:
+		return $out[0];
+	}
+}
