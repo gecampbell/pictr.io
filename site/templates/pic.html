@@ -32,9 +32,7 @@ The expiration time on this picture has been increased.</p>
 The expiration time on this picture has been reduced.</p>
 <?php } ?>
 
-<p><img src="<?php echo $PIC->url?>" alt="<?php echo $PIC->name?>" class="img-responsive" title="Picture expires in <?php
-	echo number_format($PIC->expiration - time());
-?> seconds"></p>
+<p><img src="<?php echo $PIC->url?>" alt="<?php echo $PIC->name?>" class="img-responsive"></p>
 
 <form action="<?php print($_SERVER['REQUEST_URI']);?>" method="POST" enctype="multipart/form-data" role="form">
 <div class="form-group">
