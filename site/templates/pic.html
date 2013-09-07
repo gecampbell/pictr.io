@@ -5,12 +5,17 @@
 <?php include 'navbar.html'?>
 <div class="container">
 <?php if (!$PIC) { ?>
-<div class="page-header">
-<h1><a href="/">Pictr</a> not found OMG</h1>
-</div>
-<p class="text-danger">That picture could not be found. It's quite likely that
-it has expired. Why don't you <a href="/upload">upload a new one</a>?
-</p>
+	<div class="jumbotron">
+	<div class="container">
+	<h1><a href="/">Pictr</a> <small>not found OMG</small></h1>
+	<hr>
+	<p>That page or picture you requested
+	could not be found. It's quite likely that
+	it has expired.</p>
+	<p>Why don't you <a href="/upload">upload a new one</a>?</p>
+	<p><a class="btn btn-primary btn-lg" href="/">Take me home</a></p>
+	</div>
+	</div>
 <?php } else { ?>
 <div class="page-header">
 <h1><a href="/">Pictr</a></h1>
@@ -20,8 +25,8 @@ it has expired. Why don't you <a href="/upload">upload a new one</a>?
 </div>
 <form action="<?php print($_SERVER['PHP_SELF']).'?id='.$_GET['id'];?>" method="POST" enctype="multipart/form-data" role="form">
 <div class="form-group">
-<button type="submit" value="Like" name="like" class="btn btn-primary">Love</button>
-<button type="submit" value="Offensive" name="bad" class="btn btn-danger">Hate</button>
+<button type="submit" value="Love" name="Love" class="btn btn-primary">Love</button>
+<button type="submit" value="Hate" name="Hate" class="btn btn-danger">Hate</button>
 </div>
 </form>
 <?php } ?>

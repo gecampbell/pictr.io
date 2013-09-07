@@ -18,9 +18,9 @@ try {
 	/**
 	 * handle Like, Dislike
 	 */
-	if (isset($_POST['bad'])) {
+	if (isset($_POST['Hate'])) {
 		$obj->delete();
-		header('Location: http://'.$config->domain);
+		header('Location: http://'.$_SERVER['HTTP_HOST']);
 		exit;
 	}
 
