@@ -22,16 +22,23 @@ try {
 	$diff = $delete_at - time();
 
 	/**
-	 * handle Like, Dislike
+	 * handle Love
 	 */
 	if (isset($_POST['Love'])) {
 		// love it! add time
-		$delete_at += rand(10, $CONFIG->love_extra*2);
+		if ($diff > $CONFIG->max_expiration)
+			$delete_at += 1;
+		else
+			$delete_at += rand(10, $CONFIG->love_extra*2);
 		$obj->updateMetadata(array(
 			'X-Delete-At' => $delete_at
 		));
 		$LOVED=TRUE;
 	}
+
+	/**
+	 * handle Hate
+	 */
 	if (isset($_POST['Hate'])) {
 		/*
 		error_log(sprintf('Hate[%s]: %d seconds left',
@@ -71,6 +78,7 @@ if (!$FOUND) {
 	$TITLE = 'Pictr - NOT FOUND OMG';
 	$PIC = FALSE;
 }
+
 /**
  * establish template variables
  */
