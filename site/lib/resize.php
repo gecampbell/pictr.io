@@ -45,7 +45,7 @@ class Resize {
 			$img = @imagecreatefrompng($file);
 			break;
 		default:
-error_log("Unexpected type: $type");
+			error_log("pictr.io: Unexpected type: $type");
 			$img = false;
 			break;
 		}
@@ -62,8 +62,9 @@ error_log("Unexpected type: $type");
 		$optionArray = $this->getDimensions(
 			$newWidth, $newHeight, strtolower($option));
 
-		$optimalWidth  = $optionArray['optimalWidth'];
-		$optimalHeight = $optionArray['optimalHeight'];
+		// never scale UP
+		$optimalWidth  = min($optionArray['optimalWidth'], $this->width);
+		$optimalHeight = min($optionArray['optimalHeight'], $this->height);
 
 		// *** Resample - create image canvas of x, y size
 		$this->imageResized = imagecreatetruecolor(
