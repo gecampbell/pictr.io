@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <?php include 'head.html'?>
 <body>
-<h1>Pictr <small>anonymous, ephemeral picture sharing</small></h1>
-<p id="menu"><a href="/upload">Upload a picture</a></p>
+<?php include 'navbar.html'?>
+<div class="container">
+<div class="page-header">
+<h1><a href="#">Pictr</a> <small>anonymous, ephemeral picture sharing</small></h1>
+</div>
 <?php
 	if (empty($PICTURES)) {
 ?>
@@ -14,10 +17,11 @@
 	<?php
 	foreach($PICTURES as $PIC) {
 	?>
-	<li><a href="/pic/<?php echo $PIC->name?>"><img src="<?php echo $PIC->url?>" alt="" class="image-circle" width="<?php echo $CONFIG->thumb_size?>"></a></li>
+	<li><a href="/pic/<?php echo $PIC->name?>"><img src="<?php echo $PIC->url?>" alt="" class="image-thumbnail" width="<?php echo $CONFIG->thumb_size?>"></a></li>
 	<?php } ?>
 	</ol>
 <?php } ?>
 <?php include 'footer.html'?>
+</div>
 </body>
 </html>

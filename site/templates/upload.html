@@ -1,8 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <?php include 'head.html'?>
 <body>
-	<h1><a href="/">Pictr</a> Upload</h1>
+<?php include 'navbar.html'?>
+<div class="container">
+	<div class="page-header">
+	<h1><a href="/">Pictr</a> <small>upload a picture</small></h1>
+	</div>
 	<?php
 	if (!empty($ERROR)) {
 		$msg = implode("</li>\n<li>", $ERROR);
@@ -19,9 +23,17 @@
 	this is five minutes). At the end of that time, your photo
 	will simply disappear.
 	</p>
-	<form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST" enctype="multipart/form-data">
-		<input type="file" name="<?php echo $filename;?>">
-		<select name="expiration">
+	<form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST" enctype="multipart/form-data" role="form">
+		<div class="form-group">
+
+		<label for="f1">Select file:</label>
+		<input type="file" name="<?php echo $filename;?>" id="f1">
+		<p class="help-block">
+		Choose a file from your local computer to upload.
+		</p>
+
+		<label for="s1">Choose the expiration time:</label>
+		<select name="expiration" id="s1" class="form-control">
 		<?php
 			foreach($CONFIG->expirations() as $value => $title) {
 				if ($value == 300)
@@ -32,9 +44,15 @@
 			}
 		?>
 		</select>
+		<p class="help-block">
+		Select an expiration time period. At the end of this time,
+		your picture will disappear from the Internets.
+		</p>
+		</div>
 		<input type="hidden" name="signature" value="<?php echo $signature;?>">
-		<br>
-		<button type="submit">Upload the picture</button>
+		<div class="form-group">
+		<button type="submit" class="btn btn-primary">Upload the picture</button>
+		</div>
 	</form>
 	<p class="fineprint">
 	By uploading the picture, you are certifying that you have the right
@@ -46,5 +64,6 @@
 	</p>
 </div>
 <?php include 'footer.html'?>
+</div>
 </body>
 </html>

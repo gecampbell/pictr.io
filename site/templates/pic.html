@@ -1,23 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <?php include 'head.html'?>
 <body>
+<?php include 'navbar.html'?>
+<div class="container">
 <?php if (!$PIC) { ?>
-<h1>Pictr NOT FOUND OMG</h1>
+<div class="page-header">
+<h1><a href="/">Pictr</a> not found OMG</h1>
+</div>
 <p class="error">That picture could not be found. It's quite likely that
 it has expired. Why don't you <a href="/upload">upload a new one</a>?
 </p>
 <?php } else { ?>
+<div class="page-header">
 <h1><a href="/">Pictr</a></h1>
-<p id="menu"><a href="/upload">Upload a picture</a></p>
+</div>
 <div class="pic">
 <img src="<?php echo $PIC->url?>" alt="<?php echo $PIC->name?>" class="img-responsive">
-<form action="<?php print($_SERVER['PHP_SELF']).'?id='.$_GET['id'];?>" method="POST" enctype="multipart/form-data">
-<button type="submit" value="Like" name="like">Like</button>
-<button type="submit" value="Offensive" name="bad">Offensive</button>
-</form>
 </div>
+<form action="<?php print($_SERVER['PHP_SELF']).'?id='.$_GET['id'];?>" method="POST" enctype="multipart/form-data" role="form">
+<div class="form-group">
+<button type="submit" value="Like" name="like" class="btn btn-primary">Love</button>
+<button type="submit" value="Offensive" name="bad" class="btn btn-danger">Hate</button>
+</div>
+</form>
 <?php } ?>
 <?php include 'footer.html'?>
+</div>
 </body>
 </html>

@@ -88,7 +88,7 @@ if (isset($_POST['signature'])) {
 			$tmp);
 		@unlink($tmp);
 
-		header('Location: http://'.$CONFIG->domain);
+		header('Location: http://'.$_SERVER['HTTP_HOST']);
 		exit;
 	}
 }
