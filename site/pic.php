@@ -7,8 +7,11 @@ require 'lib/pictr.php';
 // create a new configuration object
 $CONFIG = new Pictr\Config();
 
+$FOUND = TRUE; // assume we have one
+
+// id= specified?
 if (!isset($_GET['id']))
-	$ERROR = "Sorry, no picture with that ID";
+	$FOUND = FALSE;
 
 // get object stuff
 $container = $CONFIG->Container();
@@ -59,12 +62,14 @@ try {
 	$PIC->url = $obj->PublicURL();
 	$PIC->expiration = $delete_at;
 } catch (Exception $e) {
-print_r($e);
+	$FOUND=FALSE;
+}
+
+if (!$FOUND) {
 	header('HTTP/1.1 404 NOT FOUND');
 	$TITLE = 'Pictr - NOT FOUND OMG';
 	$PIC = FALSE;
 }
-
 /**
  * establish template variables
  */
