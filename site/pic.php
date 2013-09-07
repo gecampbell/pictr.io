@@ -26,7 +26,7 @@ try {
 	 */
 	if (isset($_POST['Love'])) {
 		// love it! add time
-		$delete_at += $CONFIG->love_extra;
+		$delete_at += rand(10, $CONFIG->love_extra*2);
 		$obj->updateMetadata(array(
 			'X-Delete-At' => $delete_at
 		));
@@ -65,6 +65,7 @@ try {
 	$FOUND=FALSE;
 }
 
+// set 404 headers if not found
 if (!$FOUND) {
 	header('HTTP/1.1 404 NOT FOUND');
 	$TITLE = 'Pictr - NOT FOUND OMG';
