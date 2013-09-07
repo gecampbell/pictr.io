@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<?php include 'head.html'?>
+<body>
+<h1>Pictr</h1>
+<p id="menu"><a href="/upload">Upload a picture</a></p>
+<?php
+	if (empty($PICTURES)) {
+?>
+<p>There are currently no pictures available on the site. Why don't you
+<a href="/upload">upload one</a>?</p>
+<?php } else { ?>
+	<ol>
+	<?php
+	foreach($PICTURES as $PIC) {
+	?>
+	<li><a href="/pic/<?php echo $PIC->name?>"><img src="<?php echo $PIC->url?>" alt="" width="<?php echo $CONFIG->thumb_size?>"></a></li>
+	<?php
+	}
+	?>
+	</ol>
+<?php } ?>
+<?php include 'footer.html'?>
+</body>
+</html>

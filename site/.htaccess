@@ -1,0 +1,4 @@
+RewriteEngine On
+RewriteBase /
+RewriteRule ^pic/(.+)$ pic.php?id=$1 [L,QSA]
+RewriteRule ^upload$ upload.php [L,QSA]

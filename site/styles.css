@@ -7,7 +7,7 @@ body {
 	color: #444;
 }
 img {
-	max-width: 800px;
+	max-width: 1024px;
 }
 ol {
 	list-style: none;
@@ -24,7 +24,7 @@ h1 {
 	border-bottom: 8px silver dotted;
 }
 a, a:visited {
-	color: #aaa;
+	color: silver;
 	text-decoration: none;
 }
 a:hover {
@@ -38,10 +38,34 @@ h1 a:hover {
 	color: black;
 	text-decoration: none;
 }
-p.pic {
+.pic {
 	text-align: center;
 }
 #menu {
 	font-size: smaller;
 	text-align: right;
+}
+#footer {
+	color: silver;
+	font-size: small;
+	text-align: left;
+	padding: 5px;
+	margin-top: 1em;
+	border-top: 1px silver solid;
+}
+.error {
+	color: red;
+	font-weight: bold;
+}
+.fineprint {
+	color: gray;
+	font-size: small;
+	text-align: left;
+	padding: 1em;
+	background: #eee;
+	margin: 1em 0 1em 0;
+}
+.upload {
+	max-width: 40em;
+	margin: 1em auto 1em auto;
 }

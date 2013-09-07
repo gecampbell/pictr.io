@@ -7,7 +7,7 @@
 require 'lib/pictr.php';
 require 'lib/resize.php';
 // create a new configuration object
-$config = new Pictr\Config();
+$CONFIG = new Pictr\Config();
 
 /**
  * handle POST requests
@@ -24,13 +24,13 @@ if (isset($_POST['signature'])) {
 	}
 
 	// validate signature
-	if ($config->signature($filename) != $_POST['signature']) {
+	if ($CONFIG->signature($filename) != $_POST['signature']) {
 		$ERROR[] = "Invalid signature";
 		$ERROR[] = print_r($_FILES, TRUE);
 	}
 
 	// validate expiration
-	if (!array_key_exists($_POST['expiration'], $config->expirations()))
+	if (!array_key_exists($_POST['expiration'], $CONFIG->expirations()))
 		die("Invalid expiration value");
 
 	// validate content-type
@@ -48,7 +48,7 @@ if (isset($_POST['signature'])) {
 
 	// if we're ok, create the object
 	if (empty($ERROR)) {
-		$container = $config->container();
+		$container = $CONFIG->container();
 		$obj = $container->DataObject();
 		$obj->extra_headers['X-Delete-After'] = $_POST['expiration'];
 
@@ -62,8 +62,8 @@ if (isset($_POST['signature'])) {
 						$_FILES[$filename]['tmp_name'],
 						$_FILES[$filename]['type']);
 				$im->resizeImage(
-					$config->max_pic_size,
-					$config->max_pic_size,
+					$CONFIG->max_pic_size,
+					$CONFIG->max_pic_size,
 					'landscape');
 				$im->saveImage($tmp);
 				break;
@@ -73,8 +73,8 @@ if (isset($_POST['signature'])) {
 						$_FILES[$filename]['tmp_name'],
 						$_FILES[$filename]['type']);
 				$im->resizeImage(
-					$config->max_pic_size,
-					$config->max_pic_size,
+					$CONFIG->max_pic_size,
+					$CONFIG->max_pic_size,
 					'landscape');
 				$im->saveImage($tmp);
 				break;
@@ -88,56 +88,19 @@ if (isset($_POST['signature'])) {
 			$tmp);
 		@unlink($tmp);
 
-		header('Location: http://'.$config->domain);
+		header('Location: http://'.$CONFIG->domain);
 		exit;
 	}
 }
 
-// form URL
-$container = $config->Container();
+/**
+ * establish template variables
+ */
+$container = $CONFIG->Container();
 $arr = split(' ', microtime());
 $prefix = strtotime('2031-12-31 11:59:59')-time();
 $filename = $prefix . str_replace('.', '_', $arr[1].'_'.$arr[0]);
-$signature = $config->signature($filename);
-?><!DOCTYPE html>
-<html>
-<head>
-	<title>Upload</title>
-	<link rel="stylesheet" type="text/css" href="styles.css">
-</head>
-<body>
-	<h1><a href="/">Pictr</a> Upload</h1>
-	<?php
-	if (!empty($ERROR)) {
-		$msg = implode("<br>\n", $ERROR);
-		print("<p class=\"error\">$msg</p>\n");
-	}
-	?>
-	<p>
-	To share a picture, select the file using the button below and
-	then press <em>Upload the picture</em>.
-	You can choose the duration that your photo will exist (by default,
-	this is five minutes). At the end of that time, your photo
-	will simply disappear.
-	</p>
-	<hr>
-	<form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST" enctype="multipart/form-data">
-		<input type="file" name="<?php echo $filename;?>">
-		<p>
-		<select name="expiration">
-		<?php
-			foreach($config->expirations() as $value => $title) {
-				if ($value == 300)
-					$def = ' selected="selected"';
-				else
-					$def = '';
-				print("\t<option value=\"$value\"$def>$title</option>\n");
-			}
-		?>
-		</select>
-		<input type="hidden" name="signature" value="<?php echo $signature;?>">
-		</p>
-		<button type="submit">Upload the picture</button>
-	</form>
-</body>
-</html>
+$signature = $CONFIG->signature($filename);
+$TITLE = "Pictr - up yours!";
+
+include 'templates/upload.html';

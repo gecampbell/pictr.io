@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<?php include 'head.html'?>
+<body>
+<h1><a href="/">Pictr</a></h1>
+<p id="menu"><a href="/upload">Upload a picture</a></p>
+<?php if ($ERROR) {?><p class="error"><?php echo $ERROR;?></p><?php } ?>
+<div class="pic">
+<img src="<?php echo $PIC->url?>" alt="<?php echo $PIC->name?>">
+<form action="<?php print($_SERVER['PHP_SELF']).'?id='.$_GET['id'];?>" method="POST" enctype="multipart/form-data">
+<button type="submit" value="Offensive" name="bad">Offensive</button>
+</form>
+</div>
+<?php include 'footer.html'?>
+</body>
+</html>
