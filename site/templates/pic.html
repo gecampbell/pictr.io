@@ -21,9 +21,24 @@
 <h1><a href="/">Pictr</a></h1>
 </div>
 <div class="pic">
-<img src="<?php echo $PIC->url?>" alt="<?php echo $PIC->name?>" class="img-responsive">
+
+<?php if (isset($LOVED)&&$LOVED) { ?>
+<p class="alert alert-info">Thank you for your feedback.
+The expiration time on this picture has been increased.</p>
+<?php } ?>
+
+<?php if (isset($HATED)&&$HATED) { ?>
+<p class="alert alert-danger">Thank you for your feedback.
+The expiration time on this picture has been reduced.</p>
+<?php } ?>
+
+<img src="<?php echo $PIC->url?>" alt="<?php echo $PIC->name?>" class="img-responsive" title="Picture expires in <?php
+	echo number_format($PIC->expiration - time());
+?> seconds">
+
 </div>
-<form action="<?php print($_SERVER['PHP_SELF']).'?id='.$_GET['id'];?>" method="POST" enctype="multipart/form-data" role="form">
+
+<form action="<?php print($_SERVER['REQUEST_URI']);?>" method="POST" enctype="multipart/form-data" role="form">
 <div class="form-group">
 <button type="submit" value="Love" name="Love" class="btn btn-primary">Love</button>
 <button type="submit" value="Hate" name="Hate" class="btn btn-danger">Hate</button>
