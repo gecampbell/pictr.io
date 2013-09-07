@@ -14,22 +14,31 @@ if (!isset($_GET['id']))
 $container = $config->Container();
 try {
 	$obj = $container->DataObject($_GET['id']);
-} catch (Exception $e) {
-	die("Sorry! That image has expired");
-}
 
-if (isset($_POST['bad'])) {
-	$obj->delete();
-	header('Location: http://'.$config->domain);
-	exit;
+	/**
+	 * handle Like, Dislike
+	 */
+	if (isset($_POST['bad'])) {
+		$obj->delete();
+		header('Location: http://'.$config->domain);
+		exit;
+	}
+
+	/**
+	 * create template variables
+	 */
+	$PIC = new \stdClass;
+	$PIC->name = $obj->Name();
+	$PIC->url = $obj->PublicURL();
+} catch (Exception $e) {
+	header('HTTP/1.1 404 NOT FOUND');
+	$TITLE = 'Pictr - NOT FOUND OMG';
+	$PIC = FALSE;
 }
 
 /**
  * establish template variables
  */
-$PIC = new \stdClass;
-$PIC->name = $obj->Name();
-$PIC->url = $obj->PublicURL();
 $REFRESH = 0;
 
 include 'templates/pic.html';
