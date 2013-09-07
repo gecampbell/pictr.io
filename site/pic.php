@@ -5,13 +5,13 @@
  */
 require 'lib/pictr.php';
 // create a new configuration object
-$config = new Pictr\Config();
+$CONFIG = new Pictr\Config();
 
 if (!isset($_GET['id']))
 	$ERROR = "Sorry, no picture with that ID";
 
 // get object stuff
-$container = $config->Container();
+$container = $CONFIG->Container();
 try {
 	$obj = $container->DataObject($_GET['id']);
 

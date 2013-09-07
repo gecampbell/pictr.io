@@ -5,7 +5,8 @@
   </div>
   <div class="collapse navbar-collapse navbar-ex1-collapse">
     <ul class="nav navbar-nav navbar-right">
-      <li><a href="/upload">Upload</a></li>
+      <li><a href="/upload" <?php if ($_SERVER['REQUEST_URI']=='/upload') echo "class=\"active\""?>>Upload</a></li>
+      <li><a href="/about">About</a></li>
     </ul>
   </div>
 </nav>
