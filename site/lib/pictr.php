@@ -2,6 +2,8 @@
 
 namespace Pictr;
 
+// increase the connect timeout
+define('RAXSDK_CONNECTTIMEOUT', 20);
 require 'php-opencloud/php-opencloud.php';
 
 /**
