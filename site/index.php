@@ -19,6 +19,10 @@ while($object = $olist->Next()) {
 	$pic = new \stdClass;
 	$pic->name = $object->Name();
 	$pic->url = $object->PublicURL();
+	if (isset($object->metadata->thumbnail_url))
+		$pic->thumbnail = $object->metadata->thumbnail_url;
+	else
+		$pic->thumbnail = 'No thumbnail';
 	$PICTURES[] = $pic;
 }
 $REFRESH = $CONFIG->auto_refresh;

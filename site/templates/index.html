@@ -32,7 +32,7 @@ if (empty($PICTURES)) {
 	<?php
 	foreach($PICTURES as $PIC) {
 	?>
-	<li><a href="/pic/<?php echo $PIC->name?>"><img src="<?php echo $PIC->url?>" alt="" class="image-thumbnail" width="<?php echo $CONFIG->thumb_size?>"></a></li>
+	<li><a href="/pic/<?php echo $PIC->name?>"><img src="<?php echo $PIC->url?>" alt="" class="image-thumbnail" width="<?php echo $CONFIG->thumb_size?>" title="t: <?php echo $PIC->thumbnail?>"></a></li>
 	<?php } ?>
 	</ol>
 <?php } ?>

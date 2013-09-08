@@ -9,6 +9,9 @@ require 'lib/resize.php';
 // create a new configuration object
 $CONFIG = new Pictr\Config();
 
+// get the container
+$container = $CONFIG->Container();
+
 /**
  * handle POST requests
  */
@@ -48,7 +51,6 @@ if (isset($_POST['signature'])) {
 
 	// if we're ok, create the object
 	if (empty($ERROR)) {
-		$container = $CONFIG->container();
 		$obj = $container->DataObject();
 		$obj->extra_headers['X-Delete-After'] = $_POST['expiration'];
 
@@ -57,7 +59,9 @@ if (isset($_POST['signature'])) {
 		$thumb = $tmp.'SQ';
 		switch($_FILES[$filename]['type']) {
 			case 'image/jpeg':
+				$outfile = $filename . '.jpg';
 				$tmp .= '.jpg';
+				$thumb .= '.jpg';
 				$im = new Resize(
 						$_FILES[$filename]['tmp_name'],
 						$_FILES[$filename]['type']);
@@ -66,9 +70,16 @@ if (isset($_POST['signature'])) {
 					$CONFIG->max_pic_size,
 					'landscape');
 				$im->saveImage($tmp);
+				$im->resizeImage(
+					$CONFIG->thumb_size,
+					$CONFIG->thumb_size,
+					'crop');
+				$im->saveImage($thumb);
 				break;
 			case 'image/png':
+				$outfile = $filename . '.png';
 				$tmp .= '.png';
+				$thumb .= '.png';
 				$im = new Resize(
 						$_FILES[$filename]['tmp_name'],
 						$_FILES[$filename]['type']);
@@ -77,16 +88,42 @@ if (isset($_POST['signature'])) {
 					$CONFIG->max_pic_size,
 					'landscape');
 				$im->saveImage($tmp);
+				$im->resizeImage(
+					$CONFIG->thumb_size,
+					$CONFIG->thumb_size,
+					'crop');
+				$im->saveImage($thumb);
+				break;
+			case 'image/gif':
+				$outfile = $filename . '.gif';
+				$tmp = $_FILES[$filename]['tmp_name'];
+				$thumb = $tmp;
 				break;
 			default:
+				$outfile = $filename;
 				$tmp = $_FILES[$filename]['tmp_name'];
+				$thumb = $tmp;
 		}
 
+		// create the thumbnail
+		$tcontainer = $CONFIG->Container($CONFIG->thumbnail_suffix);
+		$tobj = $tcontainer->DataObject();
+		$tobj->extra_headers['X-Delete-After'] = $_POST['expiration'];
+		$tobj->create(
+			array('name' => $outfile),
+			$thumb);
+		$tobj = $tcontainer->DataObject($outfile);
+
 		// create the object
-		$obj->Create(
-			array('name' => $filename),
+		$obj->create(
+			array('name' => $outfile),
 			$tmp);
+		$obj = $container->DataObject($outfile);
+		$obj->metadata->thumbnail_url = $tobj->PublicURL();
+error_log('thumbnail: '.$tobj->PublicURL());
+		$obj->updateMetadata(array('X-Delete-After'=>$_POST['expiration']));
 		@unlink($tmp);
+		@unlink($thumb);
 
 		header('Location: http://'.$_SERVER['HTTP_HOST']);
 		exit;
@@ -96,7 +133,6 @@ if (isset($_POST['signature'])) {
 /**
  * establish template variables
  */
-$container = $CONFIG->Container();
 $arr = split(' ', microtime());
 $prefix = strtotime('2031-12-31 11:59:59')-time();
 $filename = $prefix . str_replace('.', '_', $arr[1].'_'.$arr[0]);

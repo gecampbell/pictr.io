@@ -41,7 +41,7 @@ class Config {
 	/**
 	 * return a link to the container
 	 */
-	public function container() {
+	public function container($suffix=NULL) {
 
 		// configure our credentials
 		if (strpos($this->endpoint, 'rackspace')) {
@@ -88,7 +88,7 @@ class Config {
 
 		// return/create the container
 		$this->_container = $swift->Container();
-		$this->_container->Create(array('name'=>$this->container_name));
+		$this->_container->Create(array('name'=>$this->container_name.$suffix));
 		$this->_cdncontainer = $this->_container->enableCDN(1800);
 		return $this->_container;
 	}
