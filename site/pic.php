@@ -25,12 +25,17 @@ try {
 	 * handle Love
 	 */
 	if (isset($_POST['Love'])) {
+		$tcontainer = $CONFIG->thumbnailContainer();
 		// love it! add time
 		if ($diff > $CONFIG->max_expiration)
 			$delete_at += 1;
 		else
 			$delete_at += rand(10, $CONFIG->love_extra*2);
 		$obj->updateMetadata(array(
+			'X-Delete-At' => $delete_at
+		));
+		$tobj = $tcontainer->DataObject($obj->Name());
+		$tobj->updateMetadata(array(
 			'X-Delete-At' => $delete_at
 		));
 		$LOVED=TRUE;
@@ -55,6 +60,11 @@ try {
 			// otherwise, cut the remaining time in half
 			$delete_at = time() + round($diff/2);
 			$obj->updateMetadata(array(
+				'X-Delete-At' => $delete_at
+			));
+			$tcontainer = $CONFIG->thumbnailContainer();
+			$tobj = $tcontainer->DataObject($obj->Name());
+			$tobj->updateMetadata(array(
 				'X-Delete-At' => $delete_at
 			));
 			$HATED=TRUE;

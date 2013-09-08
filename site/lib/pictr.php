@@ -148,8 +148,9 @@ function time_seconds($seconds) {
 	$val = explode(':', gmdate('H:i:s', $seconds));
 	$out = array();
 	for($i=0; $i<3; $i++) {
-		if ($val[$i])
-			$out[] = (0+$val[$i]).' '.$units[$i].($val[$i]==1?'':'s');
+		if (($val[$i] == 0) && empty($out))
+			continue;
+		$out[] = (0+$val[$i]).' '.$units[$i].($val[$i]==1?'':'s');
 	}
 	switch(count($out)) {
 	case 3:
