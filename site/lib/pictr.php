@@ -12,7 +12,9 @@ require 'php-opencloud/php-opencloud.php';
 class Config {
 
 	const
-		TMP_CREDENTIALS = '/tmp/pictr.credentials';
+		TMP_CREDENTIALS = '/tmp/pictr.credentials',
+		APC_CLOUD_HANDLE = 'PICTR_IO_APC_CLOUD_HANDLE',
+		APC_SWIFT_HANDLE = 'PICTR_IO_APC_SWIFT_HANDLE';
 
 	public
 		$domain,			// domain name of site
@@ -22,11 +24,11 @@ class Config {
 		$swift_name,		// name of Swift service
 		$swift_region,		// Swift region identifier
 		$container_name,	// the container name
-		$secret;			// secret for temporary URL
+		$thumbnail_container,	// the thumbnail container
+		$secret,			// secret for temporary URL
+		$cdn_ttl;			// TTL for CDN container
 
 	private
-		$_container,		// the base container
-		$_cdncontainer,		// points to the CDN container
 		$expirations=array();	// expiration values
 
 	/**
@@ -41,27 +43,51 @@ class Config {
 	/**
 	 * return a link to the container
 	 */
-	public function container($suffix=NULL) {
+	public function container($name=NULL) {
 
-		// configure our credentials
-		if (strpos($this->endpoint, 'rackspace')) {
-			$credentials = array(
-				'username' => $this->username,
-				'apiKey' => $this->apikey);
-			$cloud = new \OpenCloud\Rackspace(
-				$this->endpoint,
-				$credentials);
-		}
-		else {
-			$credentials = array(
-				'username' => $this->username,
-				'password' => $this->password
-			);
-			$cloud = new \OpenCloud\OpenStack(
-				$this->endpoint,
-				$credentials);
+		if (!isset($name))
+			$name = $this->container_name;
+
+		// see if we have this in the APC cache
+		if (function_exists('apc_fetch')) {
+
+			// look for the swift
+			$cloud = apc_fetch(self::APC_CLOUD_HANDLE, $in_cache);
+
 		}
 
+		// if we couldn't retrieve it, then authenticate
+		if (!$in_cache) {
+
+			// configure our credentials
+			if (strpos($this->endpoint, 'rackspace')) {
+				$credentials = array(
+					'username' => $this->username,
+					'apiKey' => $this->apikey);
+				$cloud = new \OpenCloud\Rackspace(
+					$this->endpoint,
+					$credentials);
+			}
+			else {
+				$credentials = array(
+					'username' => $this->username,
+					'password' => $this->password
+				);
+				$cloud = new \OpenCloud\OpenStack(
+					$this->endpoint,
+					$credentials);
+			}
+
+			$old_token = $cloud->token();
+			$cloud->Authenticate();
+			// if we re-authenticated, save the new cloud
+			if ($cloud->token() != $old_token) {
+				error_log('pictr.io: saving to cache');
+				$res = apc_store(self::APC_CLOUD_HANDLE, $cloud, 60);
+			}
+		}
+
+		/* no need to save credentials
 		// import saved credentials
 		$fp = @fopen(self::TMP_CREDENTIALS, 'r');
 		if (!$fp) {		// no saved credentials
@@ -77,20 +103,25 @@ class Config {
 			fclose($fp);
 			$cloud->ImportCredentials(unserialize($str));
 		}
+		*/
 
 		// connect to Swift
 		$swift = $cloud->ObjectStore(
 			$this->swift_name,
 			$this->swift_region);
 
-		// set the temporary URL secret
-		$swift->setTempUrlSecret($this->secret);
-
 		// return/create the container
-		$this->_container = $swift->Container();
-		$this->_container->Create(array('name'=>$this->container_name.$suffix));
-		$this->_cdncontainer = $this->_container->enableCDN(1800);
-		return $this->_container;
+		$_container = $swift->Container();
+		$_container->Create(array('name'=>$name));
+		$_cdncontainer = $_container->enableCDN($this->cdn_ttl+0);
+		return $_container;
+	}
+
+	/**
+	 * returns the thumbnail container
+	 */
+	public function thumbnailContainer() {
+		return $this->container($this->thumbnail_container);
 	}
 
 	/**

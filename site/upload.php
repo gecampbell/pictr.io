@@ -106,7 +106,7 @@ if (isset($_POST['signature'])) {
 		}
 
 		// create the thumbnail
-		$tcontainer = $CONFIG->Container($CONFIG->thumbnail_suffix);
+		$tcontainer = $CONFIG->thumbnailContainer();
 		$tobj = $tcontainer->DataObject();
 		$tobj->extra_headers['X-Delete-After'] = $_POST['expiration'];
 		$tobj->create(
@@ -120,7 +120,6 @@ if (isset($_POST['signature'])) {
 			$tmp);
 		$obj = $container->DataObject($outfile);
 		$obj->metadata->thumbnail_url = $tobj->PublicURL();
-error_log('thumbnail: '.$tobj->PublicURL());
 		$obj->updateMetadata(array('X-Delete-After'=>$_POST['expiration']));
 		@unlink($tmp);
 		@unlink($thumb);

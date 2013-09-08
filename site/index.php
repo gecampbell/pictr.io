@@ -9,6 +9,8 @@ $CONFIG = new Pictr\Config();
 
 // get object stuff
 $container = $CONFIG->Container();
+$tcontainer = $CONFIG->thumbnailContainer();
+$thumb_url_base = $tcontainer->PublicURL();
 $olist = $container->ObjectList(array('limit'=>$CONFIG->max_pics_page));
 
 /**
@@ -19,10 +21,7 @@ while($object = $olist->Next()) {
 	$pic = new \stdClass;
 	$pic->name = $object->Name();
 	$pic->url = $object->PublicURL();
-	if (isset($object->metadata->thumbnail_url))
-		$pic->thumbnail = $object->metadata->thumbnail_url;
-	else
-		$pic->thumbnail = 'No thumbnail';
+	$pic->thumbnail = $thumb_url_base.'/'.$pic->name;
 	$PICTURES[] = $pic;
 }
 $REFRESH = $CONFIG->auto_refresh;
