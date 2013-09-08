@@ -26,13 +26,14 @@ class Config {
 
 	private
 		$_container,		// the base container
-		$_cdncontainer;		// points to the CDN container
+		$_cdncontainer,		// points to the CDN container
+		$expirations=array();	// expiration values
 
 	/**
 	 * creates a new configuration object, optional config file name
 	 */
 	public function __construct($ini_name="/var/www/pictr.ini") {
-		$ini = parse_ini_file($ini_name);
+		$ini = parse_ini_file($ini_name, TRUE);
 		foreach($ini as $key => $value)
 			$this->$key = $value;
 	}
@@ -96,14 +97,7 @@ class Config {
 	 * returns the array of expiration values
 	 */
 	public function expirations() {
-		return array(
-			60 				=> '1 minute',
-			60*5			=> '5 minutes',
-			60*10			=> '10 minutes',
-			60*30			=> '30 minutes',
-			60*60			=> '1 hour',
-			60*60*3			=> '3 hours'
-		);
+		return $this->expirations;
 	}
 
 	/**
