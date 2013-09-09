@@ -1,16 +1,7 @@
 <head>
 <title><?php if (empty($TITLE)) {?>Pictr - anonymous, ephemeral photo-sharing<?php } else echo $TITLE?></title>
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<?php if (isset($REFRESH)&&$REFRESH) {?>
-<meta http-equiv="refresh" content="<?php echo $REFRESH?>">
-<?php } ?>
-<?php if ((isset($LOVED)&&$LOVED)||(isset($HATED)&&$HATED)) { ?>
-<meta http-equiv="refresh" content="5;URL='http://<?php echo $_SERVER['HTTP_HOST']?>/'" />
-<?php } ?>
-
 <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
-
 <style>
 body {
 	padding-top: 70px;
@@ -27,18 +18,21 @@ h1 a {
 .pic {
 	margin-bottom: 1em;
 }
-.upload {
-	max-width: 50em;
-}
-.fineprint {
-	font-size: smaller;
-	line-height: 1.5em;
-	padding: 1em;
-	background: #ddd;
-}
 img.image-thumbnail {
 	margin-bottom: 1em;
 	border: 1px silver solid;
+}
+.container {
+	width: auto;
+	max-width: 1024px;
+}
+.container .narrow {
+	max-width: 50em;
+}
+footer {
+	border-top: 1px #eee solid;
+	margin-top: 1em;
+	padding: 1em 0 1em 0;
 }
 </style>
 </head>

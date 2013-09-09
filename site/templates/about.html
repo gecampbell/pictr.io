@@ -9,7 +9,7 @@
 <h1><a href="/">Pictr</a> <small>what's this all about, eh?</small></h1>
 </div>
 
-<div class="upload">
+<div class="narrow">
 <p class="lead">Pictr is anonymous, ephemeral picture sharing.</p>
 
 <p>Every picture uploaded has an expiration time; you can choose the value,
@@ -36,8 +36,36 @@ feedback, please file a Github issue.</p>
 <a href="http://glenc.io">Glen Campbell</a></p>
 
 <p><img src="http://c83ae45c9c662e90b259-b8ecda92d58ad5ac33fefef0f67b0f7c.r32.cf1.rackcdn.com/IMG_0065.jpg" alt="a picture of me"></p>
-</div>
 
+<hr>
+<a name="faq"></a>
+<h2>Frequently-Asked Questions</h2>
+<h3>Will my picture really disappear forever?</h3>
+<p>Yes! Of course, there are always caveats, right? The pictures are stored
+in <a href="http://www.rackspace.com">Rackspace</a> Cloud Files and have an
+associated <code>Delete-At</code> value. Thus, at the appointed time
+(within an error range of a few seconds), the stored object will be
+deleted.</p>
+<p>The images are stored in a
+<abbr title="Content Delivery Network">CDN</abbr> to improve performance; it's
+possible that the images will still be available through the CDN for another few minutes after the source has been deleted because they are cached.</p>
+<p>If someone has downloaded the picture, or if it's stored in a
+cache somewhere, then my site cannot control those other versions.</p>
+
+<h3>Is it really anonymous?</h3>
+<p>None of your personally-identifiable information is stored <em>as part
+of this system</em>. I use Google Analytics to measure traffic, and it does
+something (probably a cookie) to determine unique individuals, but I have
+no way of telling who you are from that.</p>
+<p>Likewise, all web systems have some
+level of logging where your IP address and other technical data is logged,
+mainly so that we have some way of finding and correcting problems.</p>
+<p>But please note that you don't have to login to use the system, and it's not
+linked to any of your social media accounts. You can share pictures via
+<a href="http://twitter.com">Twitter</a> (and possibly other services),
+but that's under your control.</p>
+
+</div>
 <?php include 'footer.html'?>
 </div>
 </body>

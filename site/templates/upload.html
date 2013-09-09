@@ -15,12 +15,12 @@
 <li><?php echo $msg?></li>
 </ul>
 	<?php } ?>
-<div class="upload">
+<div class="narrow">
 	<p>
 	To share a picture, select the file using the button below and
 	then press <em>Upload the picture</em>.
 	You can choose the duration that your photo will exist (by default,
-	this is five minutes). At the end of that time, your photo
+	this is fifteen minutes). At the end of that time, your photo
 	will simply disappear.
 	</p>
 	<form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST" enctype="multipart/form-data" role="form">
@@ -54,14 +54,16 @@
 		<button type="submit" class="btn btn-primary">Upload the picture</button>
 		</div>
 	</form>
-	<p class="fineprint">
+	<div class="well">
+	<small>
 	By uploading the picture, you are certifying that you have the right
 	to do so (please don't steal someone else's pictures). You are giving
 	this website permission to store and display that picture. And you are
 	granting this website permission to sue you for a bazillion dollars
 	if you are found to be in breach of any of these terms of service. Ha
 	ha, just kidding&mdash;we won't sue you for more than a million or two.
-	</p>
+	</small>
+	</div>
 </div>
 <?php include 'footer.html'?>
 </div>

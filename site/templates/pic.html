@@ -23,12 +23,16 @@
 <div class="pic">
 
 <?php if (isset($LOVED)&&$LOVED) { ?>
-<p class="alert alert-info">Thank you for your feedback.
+<p class="alert alert-info alert-dismissable">
+<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+Thank you for your feedback.
 The expiration time on this picture has been increased.</p>
 <?php } ?>
 
 <?php if (isset($HATED)&&$HATED) { ?>
-<p class="alert alert-danger">Thank you for your feedback.
+<p class="alert alert-danger alert-dismissable">
+<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+Thank you for your feedback.
 The expiration time on this picture has been reduced.</p>
 <?php } ?>
 
