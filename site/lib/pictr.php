@@ -14,7 +14,9 @@ class Config {
 	const
 		TMP_CREDENTIALS = '/tmp/pictr.credentials',
 		APC_CLOUD_HANDLE = 'PICTR_IO_APC_CLOUD_HANDLE',
-		APC_SWIFT_HANDLE = 'PICTR_IO_APC_SWIFT_HANDLE';
+		APC_SWIFT_HANDLE = 'PICTR_IO_APC_SWIFT_HANDLE',
+		APC_CONTAINER_HANDLE = 'PICTR_IO_CONTAINER',
+		APC_TTL = 300;
 
 	public
 		$domain,			// domain name of site
@@ -48,13 +50,11 @@ class Config {
 		if (!isset($name))
 			$name = $this->container_name;
 
+		$cachename = self::APC_CONTAINER_HANDLE.'__'.$name;
+
 		// see if we have this in the APC cache
-		if (function_exists('apc_fetch')) {
-
-			// look for the swift
-			$cloud = apc_fetch(self::APC_CLOUD_HANDLE, $in_cache);
-
-		}
+		// look for the swift
+		$cloud = apc_fetch(self::APC_CLOUD_HANDLE, $in_cache);
 
 		// if we couldn't retrieve it, then authenticate
 		if (!$in_cache) {
@@ -83,7 +83,9 @@ class Config {
 			// if we re-authenticated, save the new cloud
 			if ($cloud->token() != $old_token) {
 				error_log('pictr.io: saving to cache');
-				$res = apc_store(self::APC_CLOUD_HANDLE, $cloud, 60);
+				$res = apc_store(self::APC_CLOUD_HANDLE, $cloud, self::APC_TTL);
+				apc_delete(self::APC_SWIFT_HANDLE);
+				apc_delete($cachename);
 			}
 		}
 
@@ -106,14 +108,28 @@ class Config {
 		*/
 
 		// connect to Swift
-		$swift = $cloud->ObjectStore(
-			$this->swift_name,
-			$this->swift_region);
+		$swift = apc_fetch(self::APC_SWIFT_HANDLE, $in_cache);
+		if (!$in_cache) {
+			$swift = $cloud->ObjectStore(
+				$this->swift_name,
+				$this->swift_region);
+			apc_store(self::APC_SWIFT_HANDLE, $swift, self::APC_TTL);
+			apc_delete($cachename);
+		}
 
 		// return/create the container
+		$_container = apc_fetch($cachename, $in_cache);
+		if ($in_cache) {
+			error_log("Fetched $cachename from APC");
+			return $_container;
+		}
+
+		// otherwise, put it there
 		$_container = $swift->Container();
 		$_container->Create(array('name'=>$name));
 		$_cdncontainer = $_container->enableCDN($this->cdn_ttl+0);
+		apc_store($cachename, $_container, self::APC_TTL);
+
 		return $_container;
 	}
 

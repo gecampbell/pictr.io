@@ -3,6 +3,9 @@
  * @copyright 2013 Glen Campbell
  * @license Apache 2.0
  */
+
+define('APC_OLIST', 'PICTR_IO_index_olist');
+
 require 'lib/pictr.php';
 // create a new configuration object
 $CONFIG = new Pictr\Config();
@@ -11,7 +14,12 @@ $CONFIG = new Pictr\Config();
 $container = $CONFIG->Container();
 $tcontainer = $CONFIG->thumbnailContainer();
 $thumb_url_base = $tcontainer->PublicURL();
-$olist = $container->ObjectList(array('limit'=>$CONFIG->max_pics_page));
+
+$olist = apc_fetch(APC_OLIST, $in_cache);
+if (!$in_cache) {
+	$olist = $container->ObjectList(array('limit'=>$CONFIG->max_pics_page));
+	apc_store(APC_OLIST, $olist, 5);
+}
 
 /**
  * establish template variables
