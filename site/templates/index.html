@@ -32,7 +32,7 @@ if (empty($PICTURES)) {
 	<?php
 	foreach($PICTURES as $PIC) {
 	?>
-	<li><a href="/pic/<?php echo $PIC->name?>"><img src="<?php echo $PIC->thumbnail?>" alt="" class="image-thumbnail" width="<?php echo $CONFIG->thumb_size?>" <?php if ($PIC->type != 'image/gif') echo 'height="'.$CONFIG->thumb_size.'"'?> title="<?php echo $PIC->name?>"></a></li>
+	<li><a href="/pic/<?php echo $PIC->name?>"><img src="<?php echo $PIC->thumbnail?>" alt="" class="image-thumbnail" width="<?php echo $CONFIG->thumb_size?>" title="<?php echo $PIC->name?>"></a></li>
 	<?php } ?>
 	</ol>
 <?php } ?>

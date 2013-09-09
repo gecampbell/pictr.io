@@ -18,7 +18,7 @@ $thumb_url_base = $tcontainer->PublicURL();
 $olist = apc_fetch(APC_OLIST, $in_cache);
 if (!$in_cache) {
 	$olist = $container->ObjectList(array('limit'=>$CONFIG->max_pics_page));
-	apc_store(APC_OLIST, $olist, 5);
+	apc_store(APC_OLIST, $olist, 2);
 }
 
 /**

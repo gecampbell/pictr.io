@@ -76,6 +76,7 @@ try {
 	 */
 	$PIC = new \stdClass;
 	$PIC->name = $obj->Name();
+	$PIC->type = $obj->content_type;
 	$PIC->url = $obj->PublicURL();
 	$PIC->expiration = $delete_at;
 } catch (Exception $e) {

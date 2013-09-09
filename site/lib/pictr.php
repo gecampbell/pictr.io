@@ -120,7 +120,7 @@ class Config {
 		// return/create the container
 		$_container = apc_fetch($cachename, $in_cache);
 		if ($in_cache) {
-			error_log("Fetched $cachename from APC");
+			//error_log("Fetched $cachename from APC");
 			return $_container;
 		}
 
