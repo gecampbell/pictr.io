@@ -42,8 +42,34 @@ if (isset($_POST['signature'])) {
 						$_FILES[$filename]['type']);
 
 	// check for upload error
-	if ($_FILES[$filename]['error'])
-		$ERROR[] = $_FILES[$filename]['error'];
+	switch ($_FILES[$filename]['error']) {
+	case UPLOAD_ERR_OK:
+		// no error
+		break;
+	case UPLOAD_ERR_INI_SIZE:
+	case UPLOAD_ERR_FORM_SIZE:
+		$ERROR[] = 'File too large';
+		break;
+	case UPLOAD_ERR_PARTIAL:
+		$ERROR[] = 'The file was only partially uploaded';
+		break;
+	case UPLOAD_ERR_NO_FILE:
+		$ERROR[] = 'No file was uploaded';
+		break;
+	case UPLOAD_ERR_NO_TMP_DIR:
+		$ERROR[] = 'Temporary directory is missing';
+		break;
+	case UPLOAD_ERR_CANT_WRITE:
+		$ERROR[] = 'Unable to write to disk; check permissions';
+		break;
+	case UPLOAD_ERR_EXTENSION:
+		$ERROR[] = 'An extension stopped the upload';
+		break;
+	default:
+		$ERROR[] = sprintf('Unexpected error; code=%d',
+					$_FILES[$filename]['error']);
+	}
+
 
 	// check for valid tmp file
 	if (!is_uploaded_file($_FILES[$filename]['tmp_name']))
