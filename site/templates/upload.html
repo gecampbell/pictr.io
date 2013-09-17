@@ -7,15 +7,18 @@
 	<div class="page-header">
 	<h1><a href="/">Pictr</a> <small>upload a picture</small></h1>
 	</div>
+<div class="narrow">
 	<?php
 	if (!empty($ERROR)) {
-		$msg = implode("</li>\n<li>", $ERROR);
+		$msg = implode("<br>\n", $ERROR);
 		?>
-<ul class="error">
-<li><?php echo $msg?></li>
-</ul>
+<p class="alert alert-danger alert-dismissable">
+<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+<strong>Error(s):</strong>
+<br><?php echo $msg?>
+</p>
 	<?php } ?>
-<div class="narrow">
+
 	<p>
 	To share a picture, select the file using the button below and
 	then press <em>Upload the picture</em>.
