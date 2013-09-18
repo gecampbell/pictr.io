@@ -160,15 +160,17 @@ class Config {
  * formats a time string
  */
 function time_seconds($seconds) {
-	$units = array('hour','minute','second');
-	$val = explode(':', gmdate('H:i:s', $seconds));
+	$units = array('day','hour','minute','second');
+	$val = explode(':', gmdate('z:H:i:s', $seconds));
 	$out = array();
-	for($i=0; $i<3; $i++) {
+	for($i=0; $i<count($units); $i++) {
 		if (($val[$i] == 0) && empty($out))
 			continue;
 		$out[] = (0+$val[$i]).' '.$units[$i].($val[$i]==1?'':'s');
 	}
 	switch(count($out)) {
+	case 4:
+		return $out[0].', '.$out[1].', '.$out[2].', and '.$out[3];
 	case 3:
 		return $out[0].', '.$out[1].', and '.$out[2];
 	case 2:
