@@ -4,7 +4,7 @@ namespace Pictr;
 
 // increase the connect timeout
 define('RAXSDK_CONNECTTIMEOUT', 20);
-require 'php-opencloud/php-opencloud.php';
+require 'vendor/autoload.php';
 
 /**
  * The Config class contains global configuration data
@@ -45,7 +45,7 @@ class Config {
 	/**
 	 * return a link to the container
 	 */
-	public function container($name=NULL) {
+	public function Container($name=NULL) {
 
 		if (!isset($name))
 			$name = $this->container_name;
@@ -78,10 +78,10 @@ class Config {
 					$credentials);
 			}
 
-			$old_token = $cloud->token();
+			$old_token = $cloud->getToken();
 			$cloud->Authenticate();
 			// if we re-authenticated, save the new cloud
-			if ($cloud->token() != $old_token) {
+			if ($cloud->getToken() != $old_token) {
 				error_log('pictr.io: saving to cache');
 				$res = apc_store(self::APC_CLOUD_HANDLE, $cloud, self::APC_TTL);
 				apc_delete(self::APC_SWIFT_HANDLE);
@@ -110,7 +110,7 @@ class Config {
 		// connect to Swift
 		$swift = apc_fetch(self::APC_SWIFT_HANDLE, $in_cache);
 		if (!$in_cache) {
-			$swift = $cloud->ObjectStore(
+			$swift = $cloud->ObjectStoreService(
 				$this->swift_name,
 				$this->swift_region);
 			apc_store(self::APC_SWIFT_HANDLE, $swift, self::APC_TTL);
@@ -125,8 +125,12 @@ class Config {
 		}
 
 		// otherwise, put it there
+		/*
 		$_container = $swift->Container();
 		$_container->Create(array('name'=>$name));
+		*/
+		$_container = $swift->createContainer($name);
+		$_container = $swift->getContainer($name);
 		$_cdncontainer = $_container->enableCDN($this->cdn_ttl+0);
 		apc_store($cachename, $_container, self::APC_TTL);
 
